@@ -10,10 +10,10 @@ int main(){
 	}
 	fclose(fin);
 	fclose(fout);
-	
+
 	fin=stdin;
 	fout= stdout;
-	
+
 	freopen("data.in","rb",stdin);
-	freopen("data.out","wb",stdout); 
-} 
+	freopen("data.out","wb",stdout);
+}
