@@ -6,6 +6,7 @@ class Base
 {
 public:
     int i;
+    Base() : i(230) {}
     virtual void f()
     {
         cout << "Base::f->" << i << endl;
@@ -22,15 +23,42 @@ public:
     }
 };
 
+class Person
+{
+public:
+    Person() : mId(10), mAge(20) {}
+    static int personCount()
+    {
+        return sCount;
+    }
+
+    virtual void print()
+    {
+        cout << "id: " << mId
+             << ", age: " << mAge << endl;
+    }
+    virtual void job()
+    {
+        cout << "Person" << endl;
+    }
+    virtual ~Person()
+    {
+        cout << "~Person" << endl;
+    }
+
+protected:
+    static int sCount;
+    int mId;
+    int mAge;
+};
+
 int main()
 {
     // wrong way to declare functors
     // since we need to add caller's class as a param
-    typedef void (*Func)(void);
-    typedef void (*FuncWithParam)(int);
-
     typedef void (*Fun)(Base *);
     typedef void (*FunWithParam)(Base *, int);
+    typedef void (*Func)(Person *);
 
     Base b;
     b.i = 100;
@@ -57,17 +85,25 @@ int main()
          << "0x" << (*((intptr_t *)*(intptr_t *)(&b) + 1)) << endl;
     cout << dec << endl;
 
-    Func pfun = (Func)(*((intptr_t *)*(intptr_t *)(&b))); //vitural f();
+    cout << b.i << endl;
+    int **vt = (int **)*(int **)&b;
+    Fun pfun = (Fun)(*(intptr_t *)*(intptr_t *)&b); //vitural f();
     printf("f():%p\n", pfun);
-    pfun();
+    pfun(&b);
 
-    pfun = (Func)(*((intptr_t *)*(intptr_t *)(&b) + 1)); //vitural g();
+    pfun = (Fun)(*((intptr_t *)*(intptr_t *)(&b) + 1)); //vitural g();
     printf("g():%p\n", pfun);
-    pfun();
+    pfun(&b);
 
     FunWithParam pfunwithparam = (FunWithParam)(*((intptr_t *)*(intptr_t *)(&b) + 2)); //vitural g();
     printf("h():%p\n", pfunwithparam);
     pfunwithparam(&b, 1);
+
+    Person person;
+    int **vtbl = (int **)*(int **)&person;
+    Func func1 = (Func)*vtbl; //??
+
+    func1(&person);
 
     return 0;
 }

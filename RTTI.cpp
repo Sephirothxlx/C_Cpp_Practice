@@ -1,18 +1,25 @@
 #include <iostream>
+#include <typeinfo>
 
 using namespace std;
 
 class A
 {
 public:
-    void print1() {cout<<"print A"<<endl;}
+    void print1() { cout << "print A" << endl; }
 };
 
 class B : public A
 {
 public:
-    void print2() {cout<<"print B"<<endl;}
+    void print2() { cout << "print B" << endl; }
 };
+
+void printTypeInfo(const A *px)
+{
+    cout << "typeid(px) -> " << typeid(px).name() << endl;
+    cout << "typeid(*px) -> " << typeid(*px).name() << endl;
+}
 
 int main()
 {
@@ -27,6 +34,9 @@ int main()
 
     B b2;
     A *a3 = &b2;
+
+    printTypeInfo(&a1);
+    printTypeInfo(&b2);
 
     return 0;
 }
