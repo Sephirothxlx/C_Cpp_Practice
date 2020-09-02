@@ -21,6 +21,15 @@ void printTypeInfo(const A *px)
     cout << "typeid(*px) -> " << typeid(*px).name() << endl;
 }
 
+
+struct calc_data_1 {
+
+};
+
+struct calc_data_2 {
+
+};
+
 int main()
 {
     A a1;
@@ -37,6 +46,13 @@ int main()
 
     printTypeInfo(&a1);
     printTypeInfo(&b2);
+
+    struct calc_data_1 data1;
+    struct calc_data_2 data2;
+    struct calc_data_1 data3;
+
+    cout<<boolalpha<<(typeid(data1)==typeid(data2))<<endl;
+    cout<<boolalpha<<(typeid(data1)==typeid(data3))<<endl;
 
     return 0;
 }
